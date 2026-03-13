@@ -19,10 +19,10 @@ export class BuilderService {
    */
   public async polishPrompt(
     input: BuildPromptInput, 
-    intelligence: number,
+    modelId: SupportedModelId, thinkingLevel: ThinkingLevel,
     abortSignal?: AbortSignal
   ): Promise<Result<BuildPromptOutput, ApiError>> {
-    const parameters = ModelSelector.getParameters(intelligence);
+    const parameters = ModelSelector.getParameters(modelId, thinkingLevel);
     
     const userPrompt = `
 Por favor, pule el siguiente esquema CREDO en un único prompt fluido.
@@ -68,12 +68,12 @@ Instrucciones adicionales del usuario: ${input.instructions || 'Ninguna'}
    */
   public async suggestField(
     input: BuilderSuggestionInput, 
-    intelligence: number,
+    modelId: SupportedModelId, thinkingLevel: ThinkingLevel,
     abortSignal?: AbortSignal
   ): Promise<Result<string, ApiError>> {
     // Usar topP o temperatura un poco ajustada podría requerir parameters a medida,
     // pero heredamos los calculados por defecto.
-    const parameters = ModelSelector.getParameters(intelligence);
+    const parameters = ModelSelector.getParameters(modelId, thinkingLevel);
 
     const userPrompt = `
 Campos existentes:

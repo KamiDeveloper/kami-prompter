@@ -92,7 +92,7 @@ export class PrdView {
            techStack: state.modules.prd.techStack,
            detailLevel: state.modules.prd.detailLevel,
            language: state.modules.prd.language,
-           intelligenceLevel: state.intelligenceLevel
+           modelId: store.value.modelId, thinkingLevel: store.value.thinkingLevel
          }
        });
     });
@@ -208,7 +208,7 @@ export class PrdView {
                                  originalDescription: store.value.modules.prd.description,
                                  currentSectionContent: s.content,
                                  instruction,
-                                 intelligenceLevel: store.value.intelligenceLevel
+                                 modelId: store.value.modelId, thinkingLevel: store.value.thinkingLevel
                              }
                          });
                          // disable buttons while waiting

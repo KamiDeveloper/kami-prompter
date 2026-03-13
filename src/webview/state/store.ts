@@ -1,5 +1,5 @@
 import { signal } from '@preact/signals-core';
-import { ModuleId, ApiKeyStatus, VscodeTheme } from '../../types/ai';
+import { ModuleId, ApiKeyStatus, VscodeTheme, SupportedModelId, ThinkingLevel } from '../../types/ai';
 import { ImprovePromptOutput, BuildPromptOutput, PrdMakerOutput } from '../../types/modules';
 
 export interface ImproverState {
@@ -35,9 +35,11 @@ export interface PrdState {
 
 export interface KamiPrompterState {
   activeModule: ModuleId;
-  intelligenceLevel: number; // 0-100, mapea al slider
+  modelId: SupportedModelId;
+  thinkingLevel: ThinkingLevel;
   apiKeyStatus: ApiKeyStatus;
   theme: VscodeTheme;
+  globalError: string | null;
   modules: {
     improver: ImproverState;
     builder: BuilderState;
@@ -47,7 +49,9 @@ export interface KamiPrompterState {
 
 const DEFAULT_STATE: KamiPrompterState = {
   activeModule: 'improver',
-  intelligenceLevel: 50,
+  modelId: 'gemini-3.1-pro-preview',
+  thinkingLevel: 'medium',
+  globalError: null,
   apiKeyStatus: 'verifying',
   theme: 'dark',
   modules: {
@@ -90,7 +94,9 @@ export const store = signal<KamiPrompterState>(DEFAULT_STATE);
 
 export type Action = 
   | { type: 'SET_ACTIVE_MODULE'; payload: ModuleId }
-  | { type: 'SET_INTELLIGENCE'; payload: number }
+  | { type: 'SET_MODEL'; payload: SupportedModelId }
+  | { type: 'SET_THINKING'; payload: ThinkingLevel }
+  | { type: 'SET_GLOBAL_ERROR'; payload: string | null }
   | { type: 'SET_API_KEY_STATUS'; payload: ApiKeyStatus }
   | { type: 'SET_THEME'; payload: VscodeTheme }
   | { type: 'HYDRATE_STATE'; payload: Partial<KamiPrompterState> }
@@ -106,8 +112,14 @@ export function dispatch(action: Action) {
     case 'SET_ACTIVE_MODULE':
       newState.activeModule = action.payload;
       break;
-    case 'SET_INTELLIGENCE':
-      newState.intelligenceLevel = action.payload;
+    case 'SET_MODEL':
+      newState.modelId = action.payload;
+      break;
+    case 'SET_THINKING':
+      newState.thinkingLevel = action.payload;
+      break;
+    case 'SET_GLOBAL_ERROR':
+      newState.globalError = action.payload;
       break;
     case 'SET_API_KEY_STATUS':
       newState.apiKeyStatus = action.payload;

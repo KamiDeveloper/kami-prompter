@@ -20,14 +20,14 @@ export class ImproverService {
    */
   public async improvePrompt(
     input: ImprovePromptInput, 
-    intelligence: number,
+    modelId: SupportedModelId, thinkingLevel: ThinkingLevel,
     abortSignal?: AbortSignal
   ): Promise<Result<ImprovePromptOutput, ApiError>> {
     
     // Convertir la agresividad en algo verbal para el prompt de usuario
     const userPrompt = `Aplica un nivel de intervención "${input.interventionLevel}" para mejorar este prompt:\n\n${input.originalPrompt}`;
     
-    const parameters = ModelSelector.getParameters(intelligence);
+    const parameters = ModelSelector.getParameters(modelId, thinkingLevel);
 
     const result = await this.aiClient.generateText({
       prompt: userPrompt,

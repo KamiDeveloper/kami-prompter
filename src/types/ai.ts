@@ -51,11 +51,17 @@ export const MODEL_IDS = {
 export type SupportedModelId = typeof MODEL_IDS[keyof typeof MODEL_IDS];
 
 /**
- * Parámetros comunes de peticiones AI para los selectores de nivel de inteligencia.
+ * Niveles de "thinking" nativos de Gemini API.
+ */
+export type ThinkingLevel = 'low' | 'medium' | 'high';
+
+/**
+ * Parámetros comunes de peticiones AI para los selectores de modelo.
  */
 export interface ModelParameters {
   modelId: SupportedModelId;
   temperature: number;
   topP?: number;
   maxOutputTokens?: number;
+  thinkingLevel?: ThinkingLevel;
 }

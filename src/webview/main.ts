@@ -44,15 +44,16 @@ window.addEventListener('message', event => {
       }
       break;
     case 'error':
-      // The error doesn't specify which module, so we assume the active one
-      const currentModule = store.value.activeModule;
+      const moduleId = message.module;
       const errorMsg = message.message;
-      if (currentModule === 'improver') {
+      if (moduleId === 'improver') {
          dispatch({ type: 'UPDATE_IMPROVER_INPUT', payload: { error: errorMsg, loadingStage: null } });
-      } else if (currentModule === 'builder') {
+      } else if (moduleId === 'builder') {
          dispatch({ type: 'UPDATE_BUILDER_INPUT', payload: { error: errorMsg, loadingStage: null } });
-      } else if (currentModule === 'prd') {
+      } else if (moduleId === 'prd') {
          dispatch({ type: 'UPDATE_PRD_INPUT', payload: { error: errorMsg, loadingStage: null } });
+      } else {
+         dispatch({ type: 'SET_GLOBAL_ERROR', payload: errorMsg });
       }
       break;
     case 'improvePromptResult':

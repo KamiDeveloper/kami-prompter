@@ -1,49 +1,46 @@
-import { ModelParameters } from '../types';
+import { ModelParameters, SupportedModelId, ThinkingLevel } from '../types';
 
 /**
- * Convierte un nivel de inteligencia de UI [0-100] a una configuración rigurosa de modelo y parámetros.
- * Umbral: 0-70 usa Gemini 3 Flash. 71-100 usa Gemini 3.1 Pro.
+ * Convierte las selecciones de modelo y nivel de pensamiento en parámetros estructurados para el SDK de Gemini.
  */
 export class ModelSelector {
   
   /**
-   * Determina los parámetros del modelo basándose en un score del 0 al 100.
-   * @param intelligence Nivel seleccionado en el slider UI
-   * @param maxOutputOverrides Posibilidad de sobre-escribir tokens por módulo si es muy verborrágico
+   * Construye los parámetros en base al modelo seleccionado y nivel de thinking.
+   * @param modelId 'gemini-3.1-pro-preview' o 'gemini-3-flash-preview'
+   * @param thinkingLevel 'low', 'medium', o 'high'
+   * @param maxOutputOverrides Tokens máximos de salida personalizables por módulo.
    */
-  public static getParameters(intelligence: number, maxOutputOverrides?: number): ModelParameters {
-    // Clamping defensivo
-    const clampedInt = Math.max(0, Math.min(100, intelligence));
+  public static getParameters(
+    modelId: SupportedModelId, 
+    thinkingLevel: ThinkingLevel, 
+    maxOutputOverrides?: number
+  ): ModelParameters {
     
-    // De 0 a 70 -> Flash
-    if (clampedInt <= 70) {
-      // Mapeamos 0-70 a temperatura 0.0 - 1.0 (aprox)
-      const temperature = Number((clampedInt / 70.0).toFixed(2));
-      return {
-        modelId: 'gemini-3-flash-preview',
-        temperature: temperature,
-        topP: 0.95,
-        maxOutputTokens: maxOutputOverrides ?? 4000
-      };
-    } 
-    
-    // De 71 a 100 -> Pro
-    // Mapeamos 71-100 a temperatura 0.4 - 1.0 (ya que pro por defecto es más creativo, ajustamos la escala)
-    const proScale = (clampedInt - 71) / 29.0; 
-    const temperature = Number((0.4 + (proScale * 0.6)).toFixed(2));
-    
+    let temperature = 0.7; // default moderado
+    let maxOutput = maxOutputOverrides;
+
+    if (modelId === 'gemini-3-flash-preview') {
+      temperature = 0.5;
+      if (!maxOutput) maxOutput = 4000;
+    } else {
+      temperature = 0.7;
+      if (!maxOutput) maxOutput = 8000;
+    }
+
     return {
-      modelId: 'gemini-3.1-pro-preview',
-      temperature: temperature,
-      topP: 1.0,
-      maxOutputTokens: maxOutputOverrides ?? 8000
+      modelId,
+      temperature,
+      topP: 0.95,
+      maxOutputTokens: maxOutput,
+      thinkingLevel
     };
   }
 
   /**
-   * Informa a la interfaz si un nivel seleccionado cruzará el umbral de límite Pro (para mostrar un Warning visual en click).
+   * Informa si el modelo seleccionado es de altos límites de uso (Pro).
    */
-  public static isUsingStrictLimitsModel(intelligence: number): boolean {
-    return intelligence > 70;
+  public static isUsingStrictLimitsModel(modelId: SupportedModelId): boolean {
+    return modelId === 'gemini-3.1-pro-preview';
   }
 }

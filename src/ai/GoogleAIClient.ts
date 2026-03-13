@@ -85,9 +85,11 @@ export class GoogleAIClient {
         generationConfig.maxOutputTokens = config.parameters.maxOutputTokens;
       }
 
-      if (config.responseMimeType) {
-        generationConfig.responseMimeType = config.responseMimeType;
-      }
+    if (config.parameters.thinkingLevel) {
+      generationConfig.thinkingConfig = {
+        thinkingLevel: config.parameters.thinkingLevel
+      };
+    }
 
       if (config.systemInstruction) {
         generationConfig.systemInstruction = config.systemInstruction;

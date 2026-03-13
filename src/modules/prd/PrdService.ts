@@ -21,7 +21,7 @@ export class PrdService {
 
   public async generatePrd(
     input: PrdMakerInput, 
-    intelligence: number,
+    modelId: SupportedModelId, thinkingLevel: ThinkingLevel,
     abortSignal?: AbortSignal
   ): Promise<Result<PrdMakerOutput, ApiError>> {
     
@@ -30,7 +30,7 @@ export class PrdService {
     let finalSystemPrompt = PRD_SYSTEM_PROMPT.replace('{{DETAIL_LEVEL_INSTRUCTION}}', instructionStr);
     finalSystemPrompt = finalSystemPrompt.replace('{{OUTPUT_LANGUAGE}}', input.language);
 
-    const parameters = ModelSelector.getParameters(intelligence);
+    const parameters = ModelSelector.getParameters(modelId, thinkingLevel);
     
     // Prompt del usuario
     const userPrompt = `
@@ -100,10 +100,10 @@ Stack Tecnológico: ${input.techStack || '(No especificado)'}
 
   public async regenerateSection(
     input: PrdRegenerateSectionInput,
-    intelligence: number,
+    modelId: SupportedModelId, thinkingLevel: ThinkingLevel,
     abortSignal?: AbortSignal
   ): Promise<Result<string, ApiError>> {
-    const parameters = ModelSelector.getParameters(intelligence);
+    const parameters = ModelSelector.getParameters(modelId, thinkingLevel);
 
     const userPrompt = `
 Estás trabajando sobre la sección [${input.sectionId}] de un documento PRD.

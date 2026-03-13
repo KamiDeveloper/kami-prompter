@@ -122,8 +122,8 @@ export class KamiPrompterPanel implements vscode.WebviewViewProvider {
     this._view?.webview.postMessage(message);
   }
 
-  private sendError(error: ApiError, requestId?: string): void {
-    const baseError = { type: 'error' as const, code: error.code, message: error.message };
+  private sendError(moduleId: ModuleId, error: ApiError, requestId?: string): void {
+    const baseError = { type: 'error' as const, module: moduleId, code: error.code, message: error.message };
     const withRetry = error.retryAfterMs !== undefined ? { ...baseError, retryAfterMs: error.retryAfterMs } : baseError;
     this.postMessage(requestId !== undefined ? { ...withRetry, requestId } : withRetry);
   }
@@ -132,81 +132,81 @@ export class KamiPrompterPanel implements vscode.WebviewViewProvider {
     switch (message.type) {
       case 'improvePrompt': {
         const { payload, requestId } = message;
-        const { intelligenceLevel, ...input } = payload;
+        const { modelId, thinkingLevel, ...input } = payload;
         const abort = this.getAbortController('improver');
         this.postMessage({ type: 'loading', module: 'improver', stage: 'analyzing' });
-        const result = await this._improverService.improvePrompt(input, intelligenceLevel, abort.signal);
+        const result = await this._improverService.improvePrompt(input, modelId, thinkingLevel, abort.signal);
 
         if (abort.signal.aborted) return;
 
         if (result.ok) {
           this.postMessage(requestId ? { type: 'improvePromptResult', payload: result.value, requestId } : { type: 'improvePromptResult', payload: result.value });
         } else {
-          this.sendError(result.error, requestId);
+          this.sendError('improver', result.error, requestId);
         }
         break;
       }
       case 'buildPrompt': {
         const { payload, requestId } = message;
-        const { intelligenceLevel, ...input } = payload;
+        const { modelId, thinkingLevel, ...input } = payload;
         const abort = this.getAbortController('builder');
         this.postMessage({ type: 'loading', module: 'builder', stage: 'generating' });
 
-        const result = await this._builderService.polishPrompt(input, intelligenceLevel, abort.signal);
+        const result = await this._builderService.polishPrompt(input, modelId, thinkingLevel, abort.signal);
         if (abort.signal.aborted) return;
 
         if (result.ok) {
           this.postMessage(requestId ? { type: 'buildPromptResult', payload: result.value, requestId } : { type: 'buildPromptResult', payload: result.value });
         } else {
-          this.sendError(result.error, requestId);
+          this.sendError('builder', result.error, requestId);
         }
         break;
       }
       case 'suggestBuilderField': {
         const { payload, requestId } = message;
-        const { intelligenceLevel, ...input } = payload;
+        const { modelId, thinkingLevel, ...input } = payload;
         const abort = this.getAbortController('builder');
         this.postMessage({ type: 'loading', module: 'builder', stage: 'analyzing' });
 
-        const result = await this._builderService.suggestField(input, intelligenceLevel, abort.signal);
+        const result = await this._builderService.suggestField(input, modelId, thinkingLevel, abort.signal);
         if (abort.signal.aborted) return;
 
         if (result.ok) {
           this.postMessage(requestId ? { type: 'builderSuggestionResult', payload: result.value, requestId } : { type: 'builderSuggestionResult', payload: result.value });
         } else {
-          this.sendError(result.error, requestId);
+          this.sendError('builder', result.error, requestId);
         }
         break;
       }
       case 'generatePrd': {
         const { payload, requestId } = message;
-        const { intelligenceLevel, ...input } = payload;
+        const { modelId, thinkingLevel, ...input } = payload;
         const abort = this.getAbortController('prd');
         this.postMessage({ type: 'loading', module: 'prd', stage: 'generating' });
 
-        const result = await this._prdService.generatePrd(input, intelligenceLevel, abort.signal);
+        const result = await this._prdService.generatePrd(input, modelId, thinkingLevel, abort.signal);
         if (abort.signal.aborted) return;
 
         if (result.ok) {
           this.postMessage(requestId ? { type: 'generatePrdResult', payload: result.value, requestId } : { type: 'generatePrdResult', payload: result.value });
         } else {
-          this.sendError(result.error, requestId);
+          this.sendError('prd', result.error, requestId);
         }
         break;
       }
       case 'regeneratePrdSection': {
         const { payload, requestId } = message;
-        const { intelligenceLevel, ...input } = payload;
+        const { modelId, thinkingLevel, ...input } = payload;
         const abort = this.getAbortController('prd');
         this.postMessage({ type: 'loading', module: 'prd', stage: 'formatting' });
 
-        const result = await this._prdService.regenerateSection(input, intelligenceLevel, abort.signal);
+        const result = await this._prdService.regenerateSection(input, modelId, thinkingLevel, abort.signal);
         if (abort.signal.aborted) return;
 
         if (result.ok) {
           this.postMessage(requestId ? { type: 'regenerateSectionResult', payload: result.value, requestId } : { type: 'regenerateSectionResult', payload: result.value });
         } else {
-          this.sendError(result.error, requestId);
+          this.sendError('prd', result.error, requestId);
         }
         break;
       }

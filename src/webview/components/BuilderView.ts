@@ -77,7 +77,7 @@ export class BuilderView {
              dataInput: state.modules.builder.dataInput,
              outputFormat: state.modules.builder.outputFormat,
            },
-           intelligenceLevel: state.intelligenceLevel
+           modelId: store.value.modelId, thinkingLevel: store.value.thinkingLevel
          }
        });
     });

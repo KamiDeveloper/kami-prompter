@@ -67,7 +67,7 @@ export class ImproverView {
          payload: {
            originalPrompt: state.modules.improver.originalPrompt,
            interventionLevel: state.modules.improver.interventionLevel,
-           intelligenceLevel: state.intelligenceLevel
+           modelId: store.value.modelId, thinkingLevel: store.value.thinkingLevel
          }
        });
     });
