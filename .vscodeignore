@@ -1,0 +1,22 @@
+# Archivos excluidos del VSIX
+.vscode/**
+.vscode-test/**
+src/**
+docs/**
+node_modules/**
+.gitignore
+.vscodeignore
+AGENTS.md
+esbuild.config.js
+tsconfig.json
+vitest.config.ts
+**/*.test.ts
+**/*.map
+**/.DS_Store
+
+# Archivos incluidos explícitamente
+!dist/**
+!media/**
+!package.json
+!README.md
+!LICENSE

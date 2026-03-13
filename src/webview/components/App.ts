@@ -2,6 +2,7 @@ import { store, dispatch } from '../state/store';
 import { ImproverView } from './ImproverView';
 import { BuilderView } from './BuilderView';
 import { PrdView } from './PrdView';
+import { OnboardingView } from './OnboardingView';
 import { effect } from '@preact/signals-core';
 
 export class App {
@@ -9,12 +10,14 @@ export class App {
   private improverView: ImproverView;
   private builderView: BuilderView;
   private prdView: PrdView;
+  private onboardingView: OnboardingView;
 
   constructor(container: HTMLElement) {
     this.container = container;
     this.improverView = new ImproverView();
     this.builderView = new BuilderView();
     this.prdView = new PrdView();
+    this.onboardingView = new OnboardingView();
   }
 
   render() {
@@ -43,6 +46,7 @@ export class App {
     `;
 
     const viewContainer = this.container.querySelector('#view-container')!;
+    viewContainer.appendChild(this.onboardingView.getElement());
     viewContainer.appendChild(this.improverView.getElement());
     viewContainer.appendChild(this.builderView.getElement());
     viewContainer.appendChild(this.prdView.getElement());
@@ -73,23 +77,43 @@ export class App {
     const btnPrd = this.container.querySelector('#nav-prd') as HTMLButtonElement;
     const slider = this.container.querySelector('#intelligence-slider') as HTMLInputElement;
     const sliderVal = this.container.querySelector('#intelligence-val') as HTMLSpanElement;
+    const header = this.container.querySelector('.kp-header') as HTMLElement;
 
     effect(() => {
       const state = store.value;
+      const status = state.apiKeyStatus;
 
-      // Update Nav
-      btnImprover.classList.toggle('active', state.activeModule === 'improver');
-      btnBuilder.classList.toggle('active', state.activeModule === 'builder');
-      btnPrd.classList.toggle('active', state.activeModule === 'prd');
+      // ── Lógica de onboarding ───────────────────────────────────
+      // 'missing' o 'invalid' → mostrar onboarding, ocultar app normal
+      // 'valid' → mostrar app normal
+      // 'verifying' → no cambiar nada (se espera la respuesta del host)
+      if (status === 'missing' || status === 'invalid') {
+        this.onboardingView.setVisibility(true);
+        header.style.display = 'none';
+        this.improverView.setVisibility(false);
+        this.builderView.setVisibility(false);
+        this.prdView.setVisibility(false);
+        return; // No procesar el resto del effect
+      }
 
-      // Update Slider
-      slider.value = state.intelligenceLevel.toString();
-      sliderVal.textContent = state.intelligenceLevel.toString();
+      if (status === 'valid') {
+        this.onboardingView.setVisibility(false);
+        header.style.display = 'flex';
 
-      // Update View Visibility
-      this.improverView.setVisibility(state.activeModule === 'improver');
-      this.builderView.setVisibility(state.activeModule === 'builder');
-      this.prdView.setVisibility(state.activeModule === 'prd');
+        // Update Nav
+        btnImprover.classList.toggle('active', state.activeModule === 'improver');
+        btnBuilder.classList.toggle('active', state.activeModule === 'builder');
+        btnPrd.classList.toggle('active', state.activeModule === 'prd');
+
+        // Update Slider
+        slider.value = state.intelligenceLevel.toString();
+        sliderVal.textContent = state.intelligenceLevel.toString();
+
+        // Update View Visibility
+        this.improverView.setVisibility(state.activeModule === 'improver');
+        this.builderView.setVisibility(state.activeModule === 'builder');
+        this.prdView.setVisibility(state.activeModule === 'prd');
+      }
     });
   }
 }

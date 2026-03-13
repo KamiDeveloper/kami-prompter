@@ -3,6 +3,7 @@
   "publisher": "KamiDev",
   "displayName": "Kami Prompter",
   "description": "Asistente de ingeniería de prompts de alta calidad dentro de VSCode.",
+  "icon": "media/icons/logo.png",
   "version": "1.0.0",
   "license": "MIT",
   "repository": {

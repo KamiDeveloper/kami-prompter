@@ -27,6 +27,7 @@ export type WebviewToExtensionMessage =
   | { type: "generatePrd"; payload: PrdMakerInput & { intelligenceLevel: number }; requestId?: string }
   | { type: "regeneratePrdSection"; payload: PrdRegenerateSectionInput & { intelligenceLevel: number }; requestId?: string }
   | { type: "setApiKey"; payload: { key: string } }
+  | { type: "openExternalLink"; payload: { url: string } }
   | { type: "copyToClipboard"; payload: { text: string } }
   | { type: "exportToFile"; payload: { content: string; filename: string } }
   | { type: "ready" };
