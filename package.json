@@ -4,6 +4,11 @@
   "displayName": "Kami Prompter",
   "description": "Asistente de ingeniería de prompts de alta calidad dentro de VSCode.",
   "version": "1.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KamiDeveloper/kami-prompter.git"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
