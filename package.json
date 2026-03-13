@@ -21,30 +21,10 @@
   "contributes": {
     "commands": [
       {
-        "command": "kamiprompter.start",
-        "title": "Kami Prompter: Open Sidebar"
+        "command": "kamiPrompter.open",
+        "title": "Kami Prompter: Open"
       }
-    ],
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "kami-prompter-sidebar",
-          "title": "Kami Prompter",
-          "icon": "media/icons/logo.svg"
-        }
-      ]
-    },
-    "views": {
-      "kami-prompter-sidebar": [
-        {
-          "type": "webview",
-          "id": "kamiPrompter.panel",
-          "name": "Kami Prompter",
-          "icon": "media/icons/logo.svg",
-          "contextualTitle": "Kami Prompter"
-        }
-      ]
-    }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
