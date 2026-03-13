@@ -1,0 +1,78 @@
+/* variables de base para consistencia de timing */
+:root {
+  --kp-anim-duration-fast: 150ms;
+  --kp-anim-duration-mod: 250ms;
+  --kp-anim-duration-slow: 400ms;
+  --kp-anim-easing: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Keyframes TABS */
+@keyframes kpFadeInSlideUp {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Keyframes BOTÓN CLICK (Ripple base fallback/Scaling) */
+@keyframes kpScaleClickDown {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+/* Keyframes RESULT CARDS (Staggered Fade) */
+@keyframes kpFadeInScale {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* SHIMMER LOGO (Brillo pasando) */
+@keyframes kpShimmerSlide {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ====== ASIGNACIONES ====== */
+
+.kp-anim-tab {
+  animation: kpFadeInSlideUp var(--kp-anim-duration-mod) var(--kp-anim-easing) forwards;
+}
+
+.kp-anim-btn-click {
+  animation: kpScaleClickDown var(--kp-anim-duration-fast) var(--kp-anim-easing);
+}
+
+.kp-anim-result-card {
+  animation: kpFadeInScale var(--kp-anim-duration-mod) var(--kp-anim-easing) forwards;
+}
+
+.kp-anim-shimmer {
+  background: linear-gradient(
+    90deg, 
+    transparent 25%, 
+    color-mix(in srgb, var(--vscode-focusBorder) 20%, transparent) 50%, 
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: kpShimmerSlide 2s infinite linear;
+}
+
+
+/* ====== PREFERS REDUCED MOTION (MANDATORY) ====== */
+@media (prefers-reduced-motion: reduce) {
+  /* Anulamos TODA propiedad transform, y cambiamos keyframes por transiciones de opacidad crudas o nulas */
+  
+  .kp-anim-tab,
+  .kp-anim-btn-click,
+  .kp-anim-result-card {
+    animation: none !important;
+    transition: opacity var(--kp-anim-duration-mod) ease-out !important;
+    transform: none !important;
+    opacity: 1 !important; /* Forza revelado */
+  }
+
+  /* El shimmer parpadeante o de paneo estresa los sentidos; se sustituye por fondo estático */
+  .kp-anim-shimmer {
+    animation: none !important;
+    background: none !important;
+  }
+}

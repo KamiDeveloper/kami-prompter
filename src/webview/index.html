@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'nonce-{{NONCE}}';
+        style-src {{CSP_SOURCE}} 'unsafe-inline';
+        img-src {{CSP_SOURCE}} data:;
+        connect-src https://generativelanguage.googleapis.com;
+        font-src {{CSP_SOURCE}};
+    ">
+    <title>Kami Prompter</title>
+    <link href="{{STYLE_URI}}" rel="stylesheet">
+</head>
+<body>
+    <div id="app-root">
+        <!-- El estado y la UI manejados por TypeScript (Signals) se inyectarán aquí -->
+        <div class="kp-loading-splash" id="kp-boot-splash">
+            Loading Kami Prompter...
+        </div>
+    </div>
+    
+    <script nonce="{{NONCE}}" src="{{SCRIPT_URI}}"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Node Modules
+node_modules/
+
+# Docs
+docs/
+
+# Build Output
+dist/
+
+# Agents
+.agents/
+AGENTS.md

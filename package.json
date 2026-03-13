@@ -1,0 +1,64 @@
+{
+  "name": "kami-prompter",
+  "publisher": "KamiDev",
+  "displayName": "Kami Prompter",
+  "description": "Asistente de ingeniería de prompts de alta calidad dentro de VSCode.",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Machine Learning",
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "kamiprompter.start",
+        "title": "Kami Prompter: Open Sidebar"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "kami-prompter-sidebar",
+          "title": "Kami Prompter",
+          "icon": "media/icons/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "kami-prompter-sidebar": [
+        {
+          "type": "webview",
+          "id": "kamiPrompter.panel",
+          "name": "Kami Prompter",
+          "icon": "media/icons/logo.svg",
+          "contextualTitle": "Kami Prompter"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run build",
+    "watch": "node esbuild.config.js --watch",
+    "build": "node esbuild.config.js",
+    "package": "node esbuild.config.js --production",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.7.1",
+    "esbuild": "^0.27.4",
+    "typescript": "^5.3.3",
+    "vitest": "^4.1.0"
+  },
+  "dependencies": {
+    "@google/genai": "^1.45.0",
+    "@preact/signals-core": "^1.14.0"
+  }
+}

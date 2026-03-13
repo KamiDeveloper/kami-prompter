@@ -1,0 +1,61 @@
+/* base.css: Definición general de Variables (Solo --vscode-* mapping) */
+
+:root {
+  /* Fondo y colores de texto base */
+  --kp-bg: var(--vscode-editor-background);
+  --kp-fg: var(--vscode-editor-foreground);
+  --kp-text-muted: var(--vscode-descriptionForeground);
+  
+  /* Bordes de Componentes */
+  --kp-border: var(--vscode-panel-border);
+  --kp-border-focus: var(--vscode-focusBorder);
+  
+  /* Accent (Para la App según requerimiento en AGENTS.md) */
+  --kp-accent: var(--vscode-focusBorder);
+  --kp-accent-light: color-mix(in srgb, var(--kp-accent) 15%, transparent);
+  --kp-accent-hover: color-mix(in srgb, var(--kp-accent) 25%, transparent);
+  
+  /* Inputs */
+  --kp-input-bg: var(--vscode-input-background);
+  --kp-input-fg: var(--vscode-input-foreground);
+  --kp-input-border: var(--vscode-input-border);
+  
+  /* Buttons */
+  --kp-btn-primary-bg: var(--vscode-button-background);
+  --kp-btn-primary-fg: var(--vscode-button-foreground);
+  --kp-btn-primary-hover: var(--vscode-button-hoverBackground);
+  
+  --kp-btn-secondary-bg: var(--vscode-button-secondaryBackground);
+  --kp-btn-secondary-fg: var(--vscode-button-secondaryForeground);
+  --kp-btn-secondary-hover: var(--vscode-button-secondaryHoverBackground);
+
+  /* Status Colors */
+  --kp-error: var(--vscode-errorForeground);
+  --kp-warning: var(--vscode-editorWarning-foreground);
+  --kp-success: var(--vscode-testing-iconPassed);
+  
+  /* Typography */
+  --kp-font: var(--vscode-font-family);
+  --kp-font-size: var(--vscode-font-size);
+  --kp-font-weight: var(--vscode-font-weight);
+
+  /* Layout y Utils */
+  --kp-border-radius: 4px;
+}
+
+/* Hard reset para asegurar aislamiento del Viewport */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--kp-bg);
+  color: var(--kp-fg);
+  font-family: var(--kp-font);
+  font-size: var(--kp-font-size);
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
