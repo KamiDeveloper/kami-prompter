@@ -53,7 +53,7 @@ export type SupportedModelId = typeof MODEL_IDS[keyof typeof MODEL_IDS];
 /**
  * Niveles de "thinking" nativos de Gemini API.
  */
-export type ThinkingLevel = 'low' | 'medium' | 'high';
+export type ThinkingLevel = 'LOW' | 'MEDIUM' | 'HIGH';
 
 /**
  * Parámetros comunes de peticiones AI para los selectores de modelo.

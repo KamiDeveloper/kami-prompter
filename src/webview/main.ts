@@ -36,11 +36,11 @@ window.addEventListener('message', event => {
       break;
     case 'loading':
       if (message.module === 'improver') {
-        dispatch({ type: 'UPDATE_IMPROVER_INPUT', payload: { loadingStage: message.stage } });
+        dispatch({ type: 'UPDATE_IMPROVER_INPUT', payload: { loadingStage: message.stage, error: null, result: null } });
       } else if (message.module === 'builder') {
-        dispatch({ type: 'UPDATE_BUILDER_INPUT', payload: { loadingStage: message.stage } });
+        dispatch({ type: 'UPDATE_BUILDER_INPUT', payload: { loadingStage: message.stage, error: null, result: null } });
       } else if (message.module === 'prd') {
-        dispatch({ type: 'UPDATE_PRD_INPUT', payload: { loadingStage: message.stage } });
+        dispatch({ type: 'UPDATE_PRD_INPUT', payload: { loadingStage: message.stage, error: null, result: null } });
       }
       break;
     case 'error':
@@ -57,7 +57,15 @@ window.addEventListener('message', event => {
       }
       break;
     case 'improvePromptResult':
-      dispatch({ type: 'UPDATE_IMPROVER_INPUT', payload: { result: message.payload, loadingStage: null, error: null } });
+      dispatch({
+        type: 'UPDATE_IMPROVER_INPUT',
+        payload: {
+          result: message.payload,
+          history: [...store.value.modules.improver.history, message.payload],
+          loadingStage: null,
+          error: null
+        }
+      });
       break;
     case 'buildPromptResult':
       dispatch({ type: 'UPDATE_BUILDER_INPUT', payload: { result: message.payload, loadingStage: null, error: null } });

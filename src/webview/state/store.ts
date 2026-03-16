@@ -6,6 +6,7 @@ export interface ImproverState {
   originalPrompt: string;
   interventionLevel: 'subtle' | 'moderate' | 'aggressive';
   result: ImprovePromptOutput | null;
+  history: ImprovePromptOutput[];
   loadingStage: string | null;
   error: string | null;
 }
@@ -50,7 +51,7 @@ export interface KamiPrompterState {
 const DEFAULT_STATE: KamiPrompterState = {
   activeModule: 'improver',
   modelId: 'gemini-3.1-pro-preview',
-  thinkingLevel: 'medium',
+  thinkingLevel: 'MEDIUM',
   globalError: null,
   apiKeyStatus: 'verifying',
   theme: 'dark',
@@ -59,6 +60,7 @@ const DEFAULT_STATE: KamiPrompterState = {
       originalPrompt: '',
       interventionLevel: 'moderate',
       result: null,
+      history: [],
       loadingStage: null,
       error: null
     },
